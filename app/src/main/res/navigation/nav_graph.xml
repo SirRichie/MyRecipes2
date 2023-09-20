@@ -14,15 +14,39 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_RecipeListFragment"
+            app:destination="@id/RecipeListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
         android:name="de.lialuna.myrecipes2.SecondFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_second"/>
+    <fragment
+        android:id="@+id/RecipeListFragment"
+        android:name="de.lialuna.myrecipes2.RecipeListFragment"
+        android:label="Recipe List"
+        tools:layout="@layout/fragment_recipe_list">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_RecipeListFragment_to_ViewRecipeFragment"
+            app:destination="@id/ViewRecipeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/ViewRecipeFragment"
+        android:name="de.lialuna.myrecipes2.ViewRecipeFragment"
+        android:label="{dynamicTitle}"
+        tools:layout="@layout/fragment_view_recipe">
+        <argument
+            android:name="recipeIndex"
+            app:argType="integer" />
+        <argument
+            android:name="dynamicTitle"
+            app:argType="string"
+            android:defaultValue="View Recipe" />
+    </fragment>
+
 </navigation>
