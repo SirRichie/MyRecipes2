@@ -11,6 +11,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="dialog_enter_URL">Bitte Adresse des Rezepts eingeben</string>
+    <string name="dialog_title_edit_ingredient">Zutat bearbeiten</string>
 
     <string name="title_select_categories">Kategorien auswählen</string>
 
@@ -27,7 +28,8 @@
     <string name="save">Speichern</string>
     <string name="recipe_edit">Rezept ändern</string>
     <string name="recipe_create">Neues Rezept</string>
-    <string name="title_activity_edit_recipe">Rezept ändern</string>
+    <string name="title_edit_recipe">Rezept ändern</string>
+    <string name="edit_ingredient">Zutat bearbeiten</string>
     <string name="hint_recipe_title">Titel</string>
     <string name="no_categories">keine Kategorien</string>
     <string name="all_categories">Alle Kategorien</string>

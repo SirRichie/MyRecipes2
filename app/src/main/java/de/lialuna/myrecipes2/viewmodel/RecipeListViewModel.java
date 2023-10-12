@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -55,6 +57,7 @@ public class RecipeListViewModel extends ViewModel {
         if (recipes == null) {
             recipes = new MutableLiveData<>();
         }
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         recipesListenerRegistration = db
                 .collection(Constants.DB_RECIPE_COLLECTION)
@@ -93,9 +96,52 @@ public class RecipeListViewModel extends ViewModel {
                     }
                     List<Category> newCategories = documentSnapshots.toObjects(Category.class);
                     // if (newCategories != null)  // safeguard against null
-                        categories.postValue(newCategories);
+                    categories.postValue(newCategories);
                 });
 
+    }
+
+    public void saveOrStoreToDB(Recipe recipe) {
+        CollectionReference recipes = FirebaseFirestore.getInstance().collection(Constants.DB_RECIPE_COLLECTION);
+        DocumentReference recipeRef = null;
+
+        if (isNewRecipe(recipe)) {
+            // create it in the database
+            recipeRef = recipes.document();
+            recipe.setDbID(recipeRef.getId());
+        } else {
+            recipeRef = recipes.document(recipe.getDbID());
+        }
+
+        /*if (imageChanged) { // only do image handling if the image changed
+            // find image
+            String url = "images/" + recipe.getValue().getDbID() + ".jpg";
+            StorageReference imageRef = FirebaseStorage.getInstance().getReference().child(url);
+            if (imageUri != null) {
+                // upload image
+                imageRef.putFile(imageUri);
+                // set URL
+                recipe.getValue().setImageURL(url);
+            } else {
+                imageRef.delete(); // may fail, but silently
+                recipe.getValue().setImageURL(null);
+            }
+        }*/ // TODO maybe add image handling later again
+
+        // store recipe
+        recipeRef.set(recipe);
+
+    }
+
+    public void removeRecipeFromDB(Recipe recipe) {
+        if (isNewRecipe(recipe))
+            throw new IllegalStateException("Cannot delete non-existing recipe");
+        FirebaseFirestore.getInstance().collection(Constants.DB_RECIPE_COLLECTION)
+                .document(recipe.getDbID()).delete();
+    }
+
+    public boolean isNewRecipe(Recipe recipe) {
+        return recipe.getDbID() == null;
     }
 
     @Override

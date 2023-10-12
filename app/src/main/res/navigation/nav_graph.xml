@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/RecipeListFragment">
 
     <fragment
         android:id="@+id/FirstFragment"
@@ -24,7 +24,7 @@
         android:id="@+id/SecondFragment"
         android:name="de.lialuna.myrecipes2.SecondFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second"/>
+        tools:layout="@layout/fragment_second" />
     <fragment
         android:id="@+id/RecipeListFragment"
         android:name="de.lialuna.myrecipes2.RecipeListFragment"
@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_RecipeListFragment_to_ViewRecipeFragment"
             app:destination="@id/ViewRecipeFragment" />
+        <action
+            android:id="@+id/action_RecipeListFragment_to_EditRecipeFragment"
+            app:destination="@id/EditRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/ViewRecipeFragment"
@@ -45,8 +48,21 @@
             app:argType="integer" />
         <argument
             android:name="dynamicTitle"
-            app:argType="string"
-            android:defaultValue="View Recipe" />
+            android:defaultValue="View Recipe"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/EditRecipeFragment"
+        android:name="de.lialuna.myrecipes2.EditRecipeFragment"
+        android:label="{dynamicTitle}"
+        tools:layout="@layout/fragment_view_recipe">
+        <argument
+            android:name="recipeIndex"
+            app:argType="integer" />
+        <argument
+            android:name="dynamicTitle"
+            android:defaultValue="Edit Recipe"
+            app:argType="string" />
     </fragment>
 
 </navigation>

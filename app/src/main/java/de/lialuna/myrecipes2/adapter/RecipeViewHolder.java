@@ -1,9 +1,6 @@
 package de.lialuna.myrecipes2.adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +19,6 @@ import de.lialuna.myrecipes2.RecipeListFragmentDirections;
 import de.lialuna.myrecipes2.databinding.ListRecipeBinding;
 import de.lialuna.myrecipes2.entity.Category;
 import de.lialuna.myrecipes2.entity.Recipe;
-import de.lialuna.myrecipes2.util.Constants;
 
 /**
  * Created by Tobias on 08.01.2018.
@@ -68,7 +64,8 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         itemView.setOnLongClickListener(v -> {
             Log.d(TAG, "long clicked on " + recipe.hashCode());
-            startEditActivity(recipe, v.getContext(), ingredientNames);
+
+            startEditActivity(position, v);
             return true;
         });
 
@@ -79,15 +76,14 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
             glide.load(placeholder).into(recipeIconImageView);
         }
 
-        editImageView.setOnClickListener(v -> startEditActivity(recipe, v.getContext(), ingredientNames));
+        editImageView.setOnClickListener(v -> startEditActivity(position, v));
     }
 
-    private void startEditActivity(Recipe recipe, Context context, ArrayList<String> ingredientNames) {
-//        Intent intent = new Intent(context, EditRecipeActivity.class);
-//        intent.setAction(Intent.ACTION_EDIT);
-//        intent.putExtra(Constants.INTENT_EXTRA_RECIPE, (Parcelable) recipe);
-//        intent.putStringArrayListExtra(Constants.INTENT_EXTRA_INGREDIENT_NAMES, ingredientNames);
-//        context.startActivity(intent); TODO
+    private void startEditActivity(int position, View view) {
+        RecipeListFragmentDirections.ActionRecipeListFragmentToEditRecipeFragment action
+                = RecipeListFragmentDirections.actionRecipeListFragmentToEditRecipeFragment(position);
+        action.setDynamicTitle(itemView.getContext().getString(R.string.title_edit_recipe));
+        Navigation.findNavController(view).navigate(action);
     }
 
     private String buildCategoriesString(Recipe recipe) {
