@@ -85,14 +85,8 @@ public class EditIngredientsFragment extends Fragment {
         Log.d(TAG, "recipe = " + viewModel.getRecipe().getValue());
         // recycler view
 
-        // create touch helpers for drag and drop support
-        IngredientTouchHelperCallback touchHelperCallback = new IngredientTouchHelperCallback(viewModel::swapIngredients);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
-        itemTouchHelper.attachToRecyclerView(binding.ingredientListRecyclerView);
 
         adapter = new EditIngredientsRecyclerAdapter(
-                // viewModel.getRecipes().getValue().get(recipeIndex).getIngredients(),
-                // viewModel.getRecipe().getValue().getIngredients(),
                 position -> {   // lambda for click events
                     EditIngredientDialogFragment dialog = EditIngredientDialogFragment.newInstance(position);
                     dialog.show(getChildFragmentManager(), "editIngredient");
@@ -100,8 +94,13 @@ public class EditIngredientsFragment extends Fragment {
                 position -> {   // lambda for delete events
                     // viewModel.getRecipes().getValue().get(recipeIndex).removeIngredient(position);
                     viewModel.getRecipe().getValue().removeIngredient(position);
-                },
-                itemTouchHelper::startDrag);
+                });
+
+        // create touch helpers for drag and drop support
+        IngredientTouchHelperCallback touchHelperCallback = new IngredientTouchHelperCallback(adapter::swapIngredients);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(binding.ingredientListRecyclerView);
+        adapter.setStartDragListener(itemTouchHelper::startDrag);
 
         viewModel.getRecipe().observe(getViewLifecycleOwner(), recipe -> {
             Log.d(TAG, "submitting new list of ingredients + " + recipe.getIngredients());

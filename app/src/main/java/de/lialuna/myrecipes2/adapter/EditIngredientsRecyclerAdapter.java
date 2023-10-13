@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.ref.WeakReference;
+import java.util.Collections;
 import java.util.List;
 
 import de.lialuna.myrecipes2.databinding.ListEditIngredientBinding;
@@ -30,12 +31,11 @@ public class EditIngredientsRecyclerAdapter extends RecyclerView.Adapter<EditIng
 
     private List<Ingredient> ingredients;
 
-    public EditIngredientsRecyclerAdapter(RecyclerViewClickListener clickListener, DeleteIngredientListener deleteIngredientListener, StartDragListener startDragListener) {
+    public EditIngredientsRecyclerAdapter(RecyclerViewClickListener clickListener, DeleteIngredientListener deleteIngredientListener) {
 
         this.clickListener = clickListener;
         this.deleteIngredientListener = deleteIngredientListener;
         // Log.d(TAG, "ingredients (" + ingredients.size() + ") = " + ingredients);
-        this.startDragListener = startDragListener;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -81,18 +81,8 @@ public class EditIngredientsRecyclerAdapter extends RecyclerView.Adapter<EditIng
             });
         }
 
-        // make the handle work
-        /*
-        if (startDragListener != null) {
-            holder.binding.handle.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN && startDragListener != null) {
-                    startDragListener.onStartDrag(holder);
-                }
-                return false;
-            });
-        }
-         */ // TODO make drag and drop work
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -103,10 +93,10 @@ public class EditIngredientsRecyclerAdapter extends RecyclerView.Adapter<EditIng
         this.startDragListener = startDragListener;
     }
 
-//    public void swapIngredients(int fromPosition, int toPosition) {
-//        Collections.swap(ingredients, fromPosition, toPosition);
-//        notifyItemMoved(fromPosition, toPosition);
-//    }
+    public void swapIngredients(int fromPosition, int toPosition) {
+        Collections.swap(ingredients, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+    }
 
     public interface DeleteIngredientListener {
         void onRemoveIngredient(int position);

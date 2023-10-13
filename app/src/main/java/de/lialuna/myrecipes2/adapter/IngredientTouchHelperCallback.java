@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class IngredientTouchHelperCallback extends ItemTouchHelper.Callback {
 
-    private MoveListener moveListener;
+    private final MoveListener moveListener;
 
     public interface MoveListener {
         void onItemMove(int fromPosition, int toPosition);

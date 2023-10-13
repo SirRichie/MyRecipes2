@@ -72,9 +72,8 @@ public class Recipe implements Comparable<Recipe>, Serializable, Parcelable {
         return this;
     }
 
-    public Recipe removeIngredient(int position) {
+    public void removeIngredient(int position) {
         ingredients.remove(position);
-        return this;
     }
 
     @Exclude // make sure firestore does not store this
