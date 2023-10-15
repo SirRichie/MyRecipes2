@@ -3,11 +3,18 @@ package de.lialuna.myrecipes2;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import de.lialuna.myrecipes2.databinding.FragmentEditRecipeBinding;
 import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
@@ -84,6 +91,30 @@ public class EditRecipeFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_edit_recipe, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.action_save) {
+                    saveAndReturn();
+                    return true;
+                } else if (itemId == R.id.action_delete) {
+                    viewModel.removeRecipeFromDB();
+                    return true;
+                }
+                return false;
+            }
+        }, getViewLifecycleOwner());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -105,6 +136,6 @@ public class EditRecipeFragment extends Fragment {
         viewModel.getRecipe().getValue().setTitle(binding.recipeTitleEditText.getText().toString());
 
         viewModel.saveOrStoreToDB();
-        // NavUtils.navigateUpFromSameTask(this);
+        Navigation.findNavController(requireView()).navigateUp();
     }
 }

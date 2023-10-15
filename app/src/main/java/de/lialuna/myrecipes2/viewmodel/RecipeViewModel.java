@@ -64,6 +64,7 @@ public class RecipeViewModel extends ViewModel {
 
     public void addStep(String stepText) {
         recipe.getValue().getSteps().add(new Step(stepText));
+        recipeChanged();
     }
 
     public boolean isNewRecipe() {
@@ -98,8 +99,15 @@ public class RecipeViewModel extends ViewModel {
         }*/ // TODO maybe add image handling later again
 
         // store recipe
-        recipeRef.set(recipe);
+        recipeRef.set(recipe.getValue());
 
+    }
+
+    public void removeRecipeFromDB() {
+        if (isNewRecipe())
+            throw new IllegalStateException("Cannot delete non-existing recipe");
+        FirebaseFirestore.getInstance().collection(Constants.DB_RECIPE_COLLECTION)
+                .document(recipe.getValue().getDbID()).delete();
     }
 
     public static class Factory implements ViewModelProvider.Factory {
