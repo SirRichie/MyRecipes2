@@ -159,8 +159,9 @@ public class EditIngredientsRecyclerAdapter extends RecyclerView.Adapter<EditIng
 
             if (deleteIngredientListenerWeakReference != null) {
                 binding.deleteButton.setOnClickListener(v -> {
-                    // deleteIngredientListenerWeakReference.get().onRemoveIngredient(getAbsoluteAdapterPosition());
-                    Log.d(TAG, "deleting ingredient with index " + getAbsoluteAdapterPosition() + " ((" + getBindingAdapterPosition() + "))");
+                    Log.d(TAG, "deleting ingredient with index " + getAbsoluteAdapterPosition());
+                    deleteIngredientListenerWeakReference.get().onRemoveIngredient(getAbsoluteAdapterPosition());
+
                 });
             }
         }

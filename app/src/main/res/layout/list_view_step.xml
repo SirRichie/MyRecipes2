@@ -55,6 +55,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/step_number"
         app:layout_constraintTop_toTopOf="@+id/step_number"
-        app:srcCompat="@drawable/step_line" />>
+        app:srcCompat="@drawable/step_line" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

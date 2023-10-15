@@ -7,10 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+import java.util.Locale;
 
-import de.lialuna.myrecipes2.databinding.ListViewIngredientBinding;
 import de.lialuna.myrecipes2.databinding.ListViewStepBinding;
-import de.lialuna.myrecipes2.entity.Ingredient;
 import de.lialuna.myrecipes2.entity.Step;
 
 public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdapter.StepViewHolder> {
@@ -49,7 +48,7 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
         }
 
         public void bindTo(Step step) {
-            binding.stepNumber.setText(Integer.toString(getBindingAdapterPosition() + 1));
+            binding.stepNumber.setText(String.format(Locale.GERMANY, "%d", getBindingAdapterPosition() + 1));
             binding.stepText.setText(step.getText());
         }
 

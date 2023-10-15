@@ -76,9 +76,13 @@ public class Recipe implements Comparable<Recipe>, Serializable, Parcelable {
         ingredients.remove(position);
     }
 
+    public void removeStep(int position) {
+        steps.remove(position);
+    }
+
     @Exclude // make sure firestore does not store this
     public List<String> getIngredientNames() {
-        return getIngredients().stream().map(ingredient -> ingredient.getIngredient()).collect(Collectors.toList());
+        return getIngredients().stream().map(Ingredient::getIngredient).collect(Collectors.toList());
     }
 
     @Override

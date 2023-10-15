@@ -14,12 +14,16 @@ import java.util.Collections;
 
 import de.lialuna.myrecipes2.entity.Ingredient;
 import de.lialuna.myrecipes2.entity.Recipe;
+import de.lialuna.myrecipes2.entity.Step;
 import de.lialuna.myrecipes2.util.Constants;
 
 public class RecipeViewModel extends ViewModel {
     public static final String TAG = RecipeListViewModel.class.getSimpleName();
 
     private MutableLiveData<Recipe> recipe;
+
+    public RecipeViewModel() {
+    }
 
     public RecipeViewModel(Recipe recipe) {
         this.recipe = new MutableLiveData<>(recipe);
@@ -38,14 +42,28 @@ public class RecipeViewModel extends ViewModel {
         recipeChanged();
     }
 
-    public void addIngredient(Ingredient ingredient) {
-        recipe.getValue().getIngredients().add((ingredient));
+    public void addIngredient(String amount, String ingredientName) {
+        addIngredient(amount, ingredientName, false);
+    }
+
+    public void addIngredient(String amount, String ingredientName, boolean isGroup) {
+        Ingredient ingredient = new Ingredient(amount, ingredientName);
+        ingredient.setGroupIdentifier(isGroup);
+        recipe.getValue().getIngredients().add(ingredient);
         recipeChanged();
     }
 
     public void swapIngredients(int fromPosition, int toPosition) {
         Collections.swap(recipe.getValue().getIngredients(), fromPosition, toPosition);
         recipeChanged();
+    }
+
+    public void removeStep(int position) {
+        recipe.getValue().removeStep(position);
+    }
+
+    public void addStep(String stepText) {
+        recipe.getValue().getSteps().add(new Step(stepText));
     }
 
     public boolean isNewRecipe() {

@@ -14,10 +14,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import de.lialuna.myrecipes2.adapter.EditIngredientsRecyclerAdapter;
-import de.lialuna.myrecipes2.adapter.IngredientTouchHelperCallback;
+import de.lialuna.myrecipes2.adapter.ItemTouchHelperCallback;
 import de.lialuna.myrecipes2.databinding.FragmentEditIngredientsBinding;
 import de.lialuna.myrecipes2.dialog.EditIngredientDialogFragment;
-import de.lialuna.myrecipes2.entity.Ingredient;
 import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
 /**
@@ -53,7 +52,7 @@ public class EditIngredientsFragment extends Fragment {
      * @param param2      Parameter 2.
      * @return A new instance of fragment EditIngredients.
      */
-    // TODO: Rename and change types and number of parameters
+    // TODO: do we really need recipeIndex still?
     public static EditIngredientsFragment newInstance(int recipeIndex, String param2) {
         EditIngredientsFragment fragment = new EditIngredientsFragment();
         Bundle args = new Bundle();
@@ -79,25 +78,23 @@ public class EditIngredientsFragment extends Fragment {
         // RecipeListViewModel viewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
         RecipeViewModel viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeViewModel.class);
 
-        // Log.d(TAG, "recipe (" + recipeIndex + ") = " + viewModel.getRecipes().getValue().get(recipeIndex));
-        // Log.d(TAG, "going to create adapter with ingredients: " + viewModel.getRecipes().getValue().get(recipeIndex).getIngredients());
-        // Log.d(TAG, "childFragmentManager = " + getChildFragmentManager());
-        Log.d(TAG, "recipe = " + viewModel.getRecipe().getValue());
         // recycler view
 
+        initIngredientsRecyclerView(viewModel);
+        initButtons(viewModel);
+    }
 
+
+    private void initIngredientsRecyclerView(RecipeViewModel viewModel) {
         adapter = new EditIngredientsRecyclerAdapter(
                 position -> {   // lambda for click events
                     EditIngredientDialogFragment dialog = EditIngredientDialogFragment.newInstance(position);
                     dialog.show(getChildFragmentManager(), "editIngredient");
                 },
-                position -> {   // lambda for delete events
-                    // viewModel.getRecipes().getValue().get(recipeIndex).removeIngredient(position);
-                    viewModel.getRecipe().getValue().removeIngredient(position);
-                });
+                viewModel::removeIngredient);
 
         // create touch helpers for drag and drop support
-        IngredientTouchHelperCallback touchHelperCallback = new IngredientTouchHelperCallback(adapter::swapIngredients);
+        ItemTouchHelperCallback touchHelperCallback = new ItemTouchHelperCallback(adapter::swapIngredients);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
         itemTouchHelper.attachToRecyclerView(binding.ingredientListRecyclerView);
         adapter.setStartDragListener(itemTouchHelper::startDrag);
@@ -107,11 +104,15 @@ public class EditIngredientsFragment extends Fragment {
             adapter.setIngredients(recipe.getIngredients());
         });
 
+        binding.ingredientListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.ingredientListRecyclerView.setAdapter(adapter);
+    }
+
+    private void initButtons(RecipeViewModel viewModel) {
         binding.buttonAddIngredient.setOnClickListener(v -> {
-            Ingredient ingredient = new Ingredient(
+            viewModel.addIngredient(
                     binding.inputNewIngredientAmount.getText().toString(),
                     binding.inputNewIngredientName.getText().toString());
-            viewModel.addIngredient(ingredient);
 
             clearInput();
 
@@ -120,20 +121,16 @@ public class EditIngredientsFragment extends Fragment {
         });
 
         binding.buttonAddGroup.setOnClickListener(v -> {
-            Ingredient ingredient = new Ingredient(
+            viewModel.addIngredient(
                     "",
-                    binding.inputNewIngredientName.getText().toString());
-            ingredient.setGroupIdentifier(true);
-            viewModel.addIngredient(ingredient);
+                    binding.inputNewIngredientName.getText().toString(),
+                    true);
 
             clearInput();
 
             // scroll the recycler view ot make the ingredient visible
             binding.ingredientListRecyclerView.smoothScrollToPosition(adapter.getItemCount());
         });
-
-        binding.ingredientListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.ingredientListRecyclerView.setAdapter(adapter);
     }
 
     private void clearInput() {

@@ -71,13 +71,13 @@ public class EditRecipeFragment extends Fragment {
                     .setReorderingAllowed(true)
                     .add(R.id.editIngredientsFragmentContainer, EditIngredientsFragment.class, bundle)
                     .commit();
-            /*
+
             getChildFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
                     .add(R.id.editStepsFragmentContainer, EditStepsFragment.class, bundle)
                     .commit();
 
-             */
+
         }
 
 

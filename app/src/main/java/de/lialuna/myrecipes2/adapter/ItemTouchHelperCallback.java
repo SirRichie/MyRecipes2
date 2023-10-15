@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class IngredientTouchHelperCallback extends ItemTouchHelper.Callback {
+public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final MoveListener moveListener;
 
@@ -15,7 +15,7 @@ public class IngredientTouchHelperCallback extends ItemTouchHelper.Callback {
         void onItemMove(int fromPosition, int toPosition);
     }
 
-    public IngredientTouchHelperCallback(MoveListener moveListener) {
+    public ItemTouchHelperCallback(MoveListener moveListener) {
         this.moveListener = moveListener;
     }
 
