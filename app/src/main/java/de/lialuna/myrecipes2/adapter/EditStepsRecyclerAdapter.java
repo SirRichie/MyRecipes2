@@ -118,12 +118,12 @@ public class EditStepsRecyclerAdapter extends RecyclerView.Adapter<EditStepsRecy
             if (clickListenerWeakReference != null) {
                 itemView.setOnClickListener(v -> {
                     Log.d(TAG, "clicked on " + step);
-                    clickListenerWeakReference.get().onPositionClicked(getAdapterPosition());
+                    clickListenerWeakReference.get().onPositionClicked(getBindingAdapterPosition());
                 });
             }
 
             if (deleteStepListenerWeakReference != null) {
-                binding.deleteButton.setOnClickListener(v -> deleteStepListenerWeakReference.get().onStepDeleted(getAdapterPosition()));
+                binding.deleteButton.setOnClickListener(v -> deleteStepListenerWeakReference.get().onStepDeleted(getBindingAdapterPosition()));
             }
         }
     }

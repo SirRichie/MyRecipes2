@@ -1,23 +1,23 @@
 package de.lialuna.myrecipes2;
 
-import androidx.core.content.res.ResourcesCompat;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +70,24 @@ public class RecipeListFragment extends Fragment {
         DividerItemDecoration decoration = new DividerItemDecoration(binding.recipesRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(divider);
         binding.recipesRecyclerView.addItemDecoration(decoration);
+
+        binding.bottomAppBar.replaceMenu(R.menu.menu_bottom_listrecipes);
+        binding.bottomAppBar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.categoryCake) {
+                Snackbar.make(view, "Kuchen", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                return true;
+                // TODO do the filtering
+            }
+            return false;
+        });
+
+        binding.fab.setOnClickListener(fab -> {
+            RecipeListFragmentDirections.ActionRecipeListFragmentToViewRecipeFragment action
+                    = RecipeListFragmentDirections.actionRecipeListFragmentToViewRecipeFragment(-1);
+            action.setDynamicTitle(requireContext().getString(R.string.recipe_create));
+            Navigation.findNavController(requireView()).navigate(action);
+        });
 
     }
 

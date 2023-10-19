@@ -1,17 +1,16 @@
 package de.lialuna.myrecipes2;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import de.lialuna.myrecipes2.databinding.FragmentViewRecipeBinding;
 import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
@@ -72,7 +71,9 @@ public class ViewRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentViewRecipeBinding.inflate(inflater, container, false);
-        RecipeListViewModel viewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
+        RecipeListViewModel viewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
+
+
         return binding.getRoot();
     }
 
