@@ -1,4 +1,4 @@
-package de.lialuna.myrecipes2;
+package de.lialuna.myrecipes2.ui.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,9 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.util.Collections;
-
-import de.lialuna.myrecipes2.adapter.IngredientsRecyclerAdapter;
 import de.lialuna.myrecipes2.adapter.StepsRecyclerAdapter;
 import de.lialuna.myrecipes2.databinding.FragmentViewStepsListBinding;
 import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/RecipeListFragment"
-        android:name="de.lialuna.myrecipes2.RecipeListFragment"
+        android:name="de.lialuna.myrecipes2.ui.RecipeListFragment"
         android:label="Recipe List"
         tools:layout="@layout/fragment_recipe_list">
 
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/ViewRecipeFragment"
-        android:name="de.lialuna.myrecipes2.ViewRecipeFragment"
+        android:name="de.lialuna.myrecipes2.ui.view.ViewRecipeFragment"
         android:label="{dynamicTitle}"
         tools:layout="@layout/fragment_view_recipe">
         <argument
@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/EditRecipeFragment"
-        android:name="de.lialuna.myrecipes2.EditRecipeFragment"
+        android:name="de.lialuna.myrecipes2.ui.edit.EditRecipeFragment"
         android:label="{dynamicTitle}"
         tools:layout="@layout/fragment_view_recipe">
         <argument

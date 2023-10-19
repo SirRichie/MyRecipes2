@@ -1,4 +1,4 @@
-package de.lialuna.myrecipes2;
+package de.lialuna.myrecipes2.ui.edit;
 
 import android.os.Bundle;
 import android.util.Log;

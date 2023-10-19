@@ -1,4 +1,4 @@
-package de.lialuna.myrecipes2;
+package de.lialuna.myrecipes2.ui.edit;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import de.lialuna.myrecipes2.R;
 import de.lialuna.myrecipes2.databinding.FragmentEditRecipeBinding;
 import de.lialuna.myrecipes2.entity.Recipe;
 import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;

@@ -1,4 +1,4 @@
-package de.lialuna.myrecipes2;
+package de.lialuna.myrecipes2.ui;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.lialuna.myrecipes2.R;
 import de.lialuna.myrecipes2.adapter.RecipeRecyclerAdapter;
 import de.lialuna.myrecipes2.databinding.FragmentRecipeListBinding;
 import de.lialuna.myrecipes2.entity.Recipe;
