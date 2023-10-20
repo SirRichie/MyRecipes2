@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import de.lialuna.myrecipes2.adapter.IngredientsRecyclerAdapter;
 import de.lialuna.myrecipes2.databinding.FragmentViewIngredientsListBinding;
-import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
+import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,10 +75,11 @@ public class ViewIngredientListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecipeListViewModel recipeListViewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
+        // RecipeListViewModel recipeListViewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
+        RecipeViewModel viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeViewModel.class);
 
         IngredientsRecyclerAdapter adapter = new IngredientsRecyclerAdapter(
-                recipeListViewModel.getRecipes().getValue().get(recipeIndex).getIngredients()); // TODO supply real list
+                viewModel.getRecipe().getValue().getIngredients());
 
         binding.ingredientsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.ingredientsRecyclerView.setAdapter(adapter);

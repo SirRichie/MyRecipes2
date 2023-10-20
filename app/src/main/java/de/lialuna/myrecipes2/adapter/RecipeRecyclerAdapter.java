@@ -1,11 +1,7 @@
 package de.lialuna.myrecipes2.adapter;
 
-/**
- * Created by Tobias on 10.03.2018.
- */
-
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -34,7 +30,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
     private Predicate<Recipe> titlePredicate;
     private Predicate<Recipe> categoryPredicate;
 
-    private RequestManager glide;
+    private final RequestManager glide;
 
     public RecipeRecyclerAdapter(List<Recipe> allRecipes, RequestManager glide) {
         this.glide = glide;
@@ -91,6 +87,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
         obtainDisplayedRecipes();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void obtainDisplayedRecipes() {
         if (allRecipes == null)
             return;
@@ -100,5 +97,6 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
                 .collect(Collectors.toList());
 
         notifyDataSetChanged();
+
     }
 }

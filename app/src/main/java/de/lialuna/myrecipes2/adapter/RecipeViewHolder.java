@@ -3,8 +3,6 @@ package de.lialuna.myrecipes2.adapter;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,10 +13,10 @@ import java.util.ArrayList;
 import java.util.StringJoiner;
 
 import de.lialuna.myrecipes2.R;
-import de.lialuna.myrecipes2.RecipeListFragmentDirections;
 import de.lialuna.myrecipes2.databinding.ListRecipeBinding;
 import de.lialuna.myrecipes2.entity.Category;
 import de.lialuna.myrecipes2.entity.Recipe;
+import de.lialuna.myrecipes2.ui.RecipeListFragmentDirections;
 
 /**
  * Created by Tobias on 08.01.2018.
@@ -32,27 +30,23 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
 
     private static final String TAG = "RecipeViewHolder";
 
-    private TextView categoriesTextView, titleTextView;
-    private ImageView recipeIconImageView, editImageView;
     private final String noCategories;
 
+    private de.lialuna.myrecipes2.databinding.ListRecipeBinding binding;
     private RequestManager glide;
     private ArrayList<String> ingredientNames;
 
-    public RecipeViewHolder(ListRecipeBinding listRecipeBinding, RequestManager glide, ArrayList<String> ingredientNames) {
-        super(listRecipeBinding.getRoot());
+    public RecipeViewHolder(ListRecipeBinding binding, RequestManager glide, ArrayList<String> ingredientNames) {
+        super(binding.getRoot());
+        this.binding = binding;
         this.glide = glide;
         this.ingredientNames = ingredientNames;
-        titleTextView = listRecipeBinding.listRecipeTitle;
-        categoriesTextView = listRecipeBinding.listRecipeCategories;
-        recipeIconImageView = listRecipeBinding.recipeIcon;
-        editImageView = listRecipeBinding.editButton;
-        noCategories = listRecipeBinding.getRoot().getResources().getString(R.string.no_categories);
+        noCategories = binding.getRoot().getResources().getString(R.string.no_categories);
     }
 
     public void bindTo(Recipe recipe, int position) {
-        titleTextView.setText(recipe.getTitle());
-        categoriesTextView.setText(buildCategoriesString(recipe));
+        binding.listRecipeTitle.setText(recipe.getTitle());
+        binding.listRecipeCategories.setText(buildCategoriesString(recipe));
 
         itemView.setOnClickListener(v -> {
             Log.d(TAG, "clicked on " + recipe);
@@ -70,13 +64,13 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
         });
 
         if (recipe.getThumbnail() != null) {
-            glide.load(recipe.getThumbnail()).into(recipeIconImageView);
+            glide.load(recipe.getThumbnail()).into(binding.recipeIcon);
         } else {
             Drawable placeholder = itemView.getResources().getDrawable(R.drawable.ic_insert_photo_grey_500_48dp, null);
-            glide.load(placeholder).into(recipeIconImageView);
+            glide.load(placeholder).into(binding.recipeIcon);
         }
 
-        editImageView.setOnClickListener(v -> startEditActivity(position, v));
+        binding.editButton.setOnClickListener(v -> startEditActivity(position, v));
     }
 
     private void startEditActivity(int position, View view) {

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import de.lialuna.myrecipes2.adapter.StepsRecyclerAdapter;
 import de.lialuna.myrecipes2.databinding.FragmentViewStepsListBinding;
-import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
+import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,11 +75,12 @@ public class ViewStepListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecipeListViewModel recipeListViewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
+        // RecipeListViewModel recipeListViewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
+        RecipeViewModel viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeViewModel.class);
 
         StepsRecyclerAdapter adapter = new StepsRecyclerAdapter(
-                recipeListViewModel.getRecipes().getValue().get(recipeIndex).getSteps()
-        ); // TODO supply real list
+                viewModel.getRecipe().getValue().getSteps()
+        );
 
         binding.stepsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.stepsRecyclerView.setAdapter(adapter);

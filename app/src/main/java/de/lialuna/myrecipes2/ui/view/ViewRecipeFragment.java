@@ -14,6 +14,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import de.lialuna.myrecipes2.databinding.FragmentViewRecipeBinding;
 import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
+import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,7 +72,12 @@ public class ViewRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentViewRecipeBinding.inflate(inflater, container, false);
-        RecipeListViewModel viewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
+
+        // viewmodel
+        RecipeListViewModel listViewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
+
+        RecipeViewModel.Factory factory = new RecipeViewModel.Factory(listViewModel.getRecipes().getValue().get(recipeIndex));
+        RecipeViewModel viewModel = new ViewModelProvider(this, factory).get(RecipeViewModel.class);
 
 
         return binding.getRoot();
