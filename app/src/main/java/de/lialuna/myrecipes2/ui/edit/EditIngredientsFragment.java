@@ -21,21 +21,10 @@ import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link EditIngredientsFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class EditIngredientsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_RECIPE_INDEX = "recipeIndex";
-    private static final String ARG_PARAM2 = "param2";
-
     private static final String TAG = "EditIngredientsFragment";
-
-    // TODO: Rename and change types of parameters
-    private int recipeIndex;
-    private String mParam2;
 
     private FragmentEditIngredientsBinding binding;
     private EditIngredientsRecyclerAdapter adapter;
@@ -44,37 +33,8 @@ public class EditIngredientsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param recipeIndex Parameter 1.
-     * @param param2      Parameter 2.
-     * @return A new instance of fragment EditIngredients.
-     */
-    // TODO: do we really need recipeIndex still?
-    public static EditIngredientsFragment newInstance(int recipeIndex, String param2) {
-        EditIngredientsFragment fragment = new EditIngredientsFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_RECIPE_INDEX, recipeIndex);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /*@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }*/
-
-    @Override
+        @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        recipeIndex = requireArguments().getInt(EditRecipeFragment.ARG_RECIPE_INDEX);
-
         // RecipeListViewModel viewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
         RecipeViewModel viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeViewModel.class);
 

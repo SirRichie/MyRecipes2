@@ -29,16 +29,12 @@ import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
  */
 public class EditRecipeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     static final String ARG_RECIPE_INDEX = "recipeIndex";
-    private static final String ARG_PARAM2 = "param2";
 
     private static final String TAG = "EditRecipeFragment";
 
-    // TODO: Rename and change types of parameters
     private int recipeIndex;
-    private String mParam2;
 
     private FragmentEditRecipeBinding binding;
     private RecipeViewModel viewModel;
@@ -52,15 +48,12 @@ public class EditRecipeFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param recipeIndex the position of the recipe in the recipe list
-     * @param param2      Parameter 2.
      * @return A new instance of fragment EditRecipeFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static EditRecipeFragment newInstance(int recipeIndex, String param2) {
+    public static EditRecipeFragment newInstance(int recipeIndex) {
         EditRecipeFragment fragment = new EditRecipeFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_RECIPE_INDEX, recipeIndex);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
