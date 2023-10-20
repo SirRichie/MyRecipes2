@@ -22,14 +22,6 @@ import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
  */
 public class ViewIngredientListFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_RECIPE_ID = "recipeId";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private int recipeIndex;
-    private String mParam2;
     private FragmentViewIngredientsListBinding binding;
 
     public ViewIngredientListFragment() {
@@ -40,27 +32,10 @@ public class ViewIngredientListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param recipeIndex the position of the recipe in the recipe list
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ViewIngredientListFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static ViewIngredientListFragment newInstance(int recipeIndex, String param2) {
-        ViewIngredientListFragment fragment = new ViewIngredientListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_RECIPE_ID, recipeIndex);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            recipeIndex = getArguments().getInt(ARG_RECIPE_ID);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public static ViewIngredientListFragment newInstance() {
+        return new ViewIngredientListFragment();
     }
 
     @Override

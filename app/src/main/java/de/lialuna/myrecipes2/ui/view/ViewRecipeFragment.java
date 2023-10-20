@@ -26,12 +26,11 @@ public class ViewRecipeFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_RECIPE_INDEX = "recipeIndex";
-    private static final String ARG_PARAM2 = "param2";
+
     private static final String TAG = "ViewRecipeFragment";
 
     // TODO: Rename and change types of parameters
     private int recipeIndex;
-    private String mParam2;
     private de.lialuna.myrecipes2.databinding.FragmentViewRecipeBinding binding;
 
     public ViewRecipeFragment() {
@@ -43,15 +42,13 @@ public class ViewRecipeFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param recipeIndex the position of the recipe in the recipe list
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ViewRecipeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ViewRecipeFragment newInstance(int recipeIndex, String param2) {
+    public static ViewRecipeFragment newInstance(int recipeIndex) {
         ViewRecipeFragment fragment = new ViewRecipeFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_RECIPE_INDEX, recipeIndex);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,7 +65,7 @@ public class ViewRecipeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentViewRecipeBinding.inflate(inflater, container, false);
@@ -77,7 +74,8 @@ public class ViewRecipeFragment extends Fragment {
         RecipeListViewModel listViewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
 
         RecipeViewModel.Factory factory = new RecipeViewModel.Factory(listViewModel.getRecipes().getValue().get(recipeIndex));
-        RecipeViewModel viewModel = new ViewModelProvider(this, factory).get(RecipeViewModel.class);
+        // we don't use the viewmodel here, but we need to create it so children have access to it
+        new ViewModelProvider(this, factory).get(RecipeViewModel.class);
 
 
         return binding.getRoot();
@@ -90,7 +88,7 @@ public class ViewRecipeFragment extends Fragment {
         binding.pager.setAdapter(adapter);
     }
 
-    public class ViewRecipeStateAdapter extends FragmentStateAdapter {
+    public static class ViewRecipeStateAdapter extends FragmentStateAdapter {
 
         public ViewRecipeStateAdapter(@NonNull Fragment fragment) {
             super(fragment);
@@ -101,9 +99,9 @@ public class ViewRecipeFragment extends Fragment {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    return ViewIngredientListFragment.newInstance(recipeIndex, "");
+                    return ViewIngredientListFragment.newInstance();
                 case 1:
-                    return ViewStepListFragment.newInstance(recipeIndex, "");
+                    return ViewStepListFragment.newInstance();
                 default:
                     throw new IllegalStateException("Should never be here");
             }
