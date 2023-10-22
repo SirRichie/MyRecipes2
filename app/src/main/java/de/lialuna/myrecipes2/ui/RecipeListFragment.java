@@ -84,8 +84,8 @@ public class RecipeListFragment extends Fragment {
         });
 
         binding.fab.setOnClickListener(fab -> {
-            RecipeListFragmentDirections.ActionRecipeListFragmentToViewRecipeFragment action
-                    = RecipeListFragmentDirections.actionRecipeListFragmentToViewRecipeFragment(-1);
+            RecipeListFragmentDirections.ActionRecipeListFragmentToEditRecipeFragment action
+                    = RecipeListFragmentDirections.actionRecipeListFragmentToEditRecipeFragment(-1);
             action.setDynamicTitle(requireContext().getString(R.string.recipe_create));
             Navigation.findNavController(requireView()).navigate(action);
         });

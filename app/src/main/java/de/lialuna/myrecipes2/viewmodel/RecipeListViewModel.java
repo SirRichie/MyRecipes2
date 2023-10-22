@@ -44,12 +44,25 @@ public class RecipeListViewModel extends ViewModel {
         }
         return categories;
     }
+
     public LiveData<List<Recipe>> getRecipes() {
         if (recipes == null) {
             recipes = new MutableLiveData<>();
             subscribeToRecipes();
         }
         return recipes;
+    }
+
+    public LiveData<Recipe> getRecipe(int index) {
+        if (index == -1) {
+            Recipe recipe = new Recipe();
+            recipe.setSteps(new ArrayList<>());
+            recipe.setIngredients(new ArrayList<>());
+            recipe.setCategories(new ArrayList<>());
+            return new MutableLiveData<>(recipe);
+        } else {
+            return new MutableLiveData<>(recipes.getValue().get(index));
+        }
     }
 
     private void subscribeToRecipes() {

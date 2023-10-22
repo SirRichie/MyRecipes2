@@ -62,6 +62,8 @@ public class EditStepsRecyclerAdapter extends RecyclerView.Adapter<EditStepsRecy
 
     @Override
     public int getItemCount() {
+        if (steps == null)
+            return 0;
         return steps.size();
     }
 

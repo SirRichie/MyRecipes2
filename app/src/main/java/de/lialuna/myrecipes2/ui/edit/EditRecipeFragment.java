@@ -18,7 +18,6 @@ import androidx.navigation.Navigation;
 
 import de.lialuna.myrecipes2.R;
 import de.lialuna.myrecipes2.databinding.FragmentEditRecipeBinding;
-import de.lialuna.myrecipes2.entity.Recipe;
 import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
 import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
@@ -117,8 +116,7 @@ public class EditRecipeFragment extends Fragment {
 
         // viewmodel
         RecipeListViewModel listViewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
-        Recipe recipe = recipeIndex < 0 ? new Recipe() : listViewModel.getRecipes().getValue().get(recipeIndex);
-        RecipeViewModel.Factory factory = new RecipeViewModel.Factory(recipe);
+        RecipeViewModel.Factory factory = new RecipeViewModel.Factory(listViewModel.getRecipe(recipeIndex).getValue());
         viewModel = new ViewModelProvider(this, factory).get(RecipeViewModel.class);
 
         // populate UI with recipe information
