@@ -18,6 +18,7 @@ import androidx.navigation.Navigation;
 
 import de.lialuna.myrecipes2.R;
 import de.lialuna.myrecipes2.databinding.FragmentEditRecipeBinding;
+import de.lialuna.myrecipes2.dialog.EditCategoriesDialogFragment;
 import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
 import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
@@ -101,6 +102,10 @@ public class EditRecipeFragment extends Fragment {
                     return true;
                 } else if (itemId == R.id.action_delete) {
                     viewModel.removeRecipeFromDB();
+                    return true;
+                } else if (itemId == R.id.action_categories) {
+                    EditCategoriesDialogFragment dialog = new EditCategoriesDialogFragment();
+                    dialog.show(getChildFragmentManager(), "editCategories");
                     return true;
                 }
                 return false;

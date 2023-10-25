@@ -71,6 +71,9 @@ public class RecipeListViewModel extends ViewModel {
             recipes = new MutableLiveData<>();
         }
 
+        // TODO temp
+        Category categoryToDelete = new Category("Nudeln");
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         recipesListenerRegistration = db
                 .collection(Constants.DB_RECIPE_COLLECTION)
@@ -84,8 +87,13 @@ public class RecipeListViewModel extends ViewModel {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
                         Recipe r = snapshot.toObject(Recipe.class);
                         r.setDbID(snapshot.getId());
+                        // TODO temp
+                        // r.getCategories().remove(categoryToDelete);
+                        // snapshot.getReference().set(r);
+                        //
                         newRecipes.add(r);
                     }
+
                     Collections.sort(newRecipes);
                     // publish the new result
                     Log.d(TAG, "received list of recipies from db with size " + newRecipes.size());

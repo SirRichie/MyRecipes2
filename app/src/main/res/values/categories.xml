@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="categories_names">
+        <item>Vorspeise</item>
+        <item>Alltag</item>
+        <item>Vegetarisch</item>
+        <item>Dessert</item>
+        <item>Kuchen</item>
+    </array>
+    <array name="categories_icons">
+        <item>@drawable/ic_category_starter</item>
+        <item>@drawable/ic_category_daily</item>
+        <item>@drawable/ic_category_vegetarian</item>
+        <item>@drawable/ic_category_sweet</item>
+        <item>@drawable/ic_category_cake</item>
+    </array>
+</resources>

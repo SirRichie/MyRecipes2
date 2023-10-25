@@ -3,6 +3,8 @@ package de.lialuna.myrecipes2.ui;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -73,6 +75,14 @@ public class RecipeListFragment extends Fragment {
         binding.recipesRecyclerView.addItemDecoration(decoration);
 
         binding.bottomAppBar.replaceMenu(R.menu.menu_bottom_listrecipes);
+
+        Menu menu = binding.bottomAppBar.getMenu();
+
+        MenuItem newItem = menu.add(Menu.NONE, 28304803, Menu.NONE, "Alltag");
+        newItem.setIcon(R.drawable.ic_category_daily);
+        newItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+
         binding.bottomAppBar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.categoryCake) {
                 Snackbar.make(view, "Kuchen", Snackbar.LENGTH_LONG)

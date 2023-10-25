@@ -7,11 +7,12 @@
     <string name="action_settings">Einstellungen</string>
     <string name="action_categories">Kategorien</string>
     <string name="action_import">Importieren</string>
-    <string name="title_activity_tabbed">TabbedActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="dialog_enter_URL">Bitte Adresse des Rezepts eingeben</string>
     <string name="dialog_title_edit_ingredient">Zutat bearbeiten</string>
+    <string name="dialog_confirm">Wirklich?</string>
+    <string name="dialog_cancel">Abbrechen</string>
+    <string name="dialog_OK">OK</string>
 
     <string name="title_select_categories">Kategorien auswählen</string>
 
@@ -28,7 +29,7 @@
     <string name="save">Speichern</string>
     <string name="recipe_edit">Rezept ändern</string>
     <string name="recipe_create">Neues Rezept</string>
-    <string name="title_edit_recipe">Rezept ändern</string>
+
     <string name="edit_ingredient">Zutat bearbeiten</string>
     <string name="edit_step">Schritt bearbeiten</string>
     <string name="hint_recipe_title">Titel</string>
@@ -44,28 +45,11 @@
     <string name="invalid_url">Ungültige Adresse</string>
     <string name="warning_no_parser">Kann von %1$s nicht importieren</string>
 
-    <string name="cancel">Abbrechen</string>
-    <string name="OK">OK</string>
+
     <string name="export">Export</string>
 
-    <string name="dialog_confirm">Wirklich?</string>
 
+    <string name="title_edit_recipe">Rezept ändern</string>
     <string name="title_activity_categories">Kategorien</string>
     <string name="title_activity_search_results">Gefundene Rezepte</string>
-
-
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_bottom_test">BottomTest</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
 </resources>

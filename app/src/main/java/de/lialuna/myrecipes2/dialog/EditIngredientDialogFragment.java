@@ -52,7 +52,7 @@ public class EditIngredientDialogFragment extends DialogFragment {
                 .setTitle(binding.getRoot().getContext().getString(R.string.edit_ingredient))
                 .setView(binding.getRoot())
                 // Add action buttons
-                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_OK, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // write back to the ingredient - since these are objects this should directly reflect down to the model
@@ -61,7 +61,7 @@ public class EditIngredientDialogFragment extends DialogFragment {
                         viewModel.recipeChanged();
                     }
                 })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         EditIngredientDialogFragment.this.getDialog().cancel();
                     }
