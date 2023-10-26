@@ -27,22 +27,10 @@ public class RecipeListViewModel extends ViewModel {
     private ListenerRegistration categoriesListenerRegistration;
     private ListenerRegistration recipesListenerRegistration;
 
-    private MutableLiveData<List<Category>> categories;
     private MutableLiveData<List<Recipe>> recipes;
 
     public RecipeListViewModel() {
         subscribeToRecipes();
-        subscribeToCategories();
-    }
-
-
-
-    public LiveData<List<Category>> getCategories() {
-        if (categories == null) {
-            categories = new MutableLiveData<>();
-            subscribeToCategories();
-        }
-        return categories;
     }
 
     public LiveData<List<Recipe>> getRecipes() {
@@ -87,10 +75,6 @@ public class RecipeListViewModel extends ViewModel {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
                         Recipe r = snapshot.toObject(Recipe.class);
                         r.setDbID(snapshot.getId());
-                        // TODO temp
-                        // r.getCategories().remove(categoryToDelete);
-                        // snapshot.getReference().set(r);
-                        //
                         newRecipes.add(r);
                     }
 
@@ -99,27 +83,6 @@ public class RecipeListViewModel extends ViewModel {
                     Log.d(TAG, "received list of recipies from db with size " + newRecipes.size());
                     recipes.postValue(newRecipes);
                 });
-    }
-
-    private void subscribeToCategories() {
-        // ensure categories is initialized
-        if (categories == null) {
-            categories = new MutableLiveData<>();
-        }
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        categoriesListenerRegistration = db
-                .collection(Constants.DB_CATEGORY_COLLECTION)
-                .addSnapshotListener((documentSnapshots, e) -> {
-                    if (e != null) {
-                        Log.w(TAG, "Listen failed: ", e);
-                        return;
-                    }
-                    List<Category> newCategories = documentSnapshots.toObjects(Category.class);
-                    // if (newCategories != null)  // safeguard against null
-                    categories.postValue(newCategories);
-                });
-
     }
 
     public void saveOrStoreToDB(Recipe recipe) {
