@@ -87,6 +87,10 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
         obtainDisplayedRecipes();
     }
 
+    public void setCategoryFilter(String categoryName) {
+        setCategoryFilter(new Category(categoryName));
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private void obtainDisplayedRecipes() {
         if (allRecipes == null)

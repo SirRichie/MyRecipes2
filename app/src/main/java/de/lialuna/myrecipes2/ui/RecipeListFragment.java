@@ -1,5 +1,9 @@
 package de.lialuna.myrecipes2.ui;
 
+import android.content.res.TypedArray;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,7 +23,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +57,28 @@ public class RecipeListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recipeListViewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
 
+        initializeRecyclerViewAdapter();
+
+        generateBottomMenu();
+
+        ColorFilter colorFilter = new BlendModeColorFilter(getResources().getColor(R.color.complementary_700, null), BlendMode.SRC_ATOP);
+        binding.bottomAppBar.setOnMenuItemClickListener(item -> {
+            recipeRecyclerAdapter.setCategoryFilter(item.getTitle().toString());
+            clearBottomAppBarColors();
+            item.getIcon().setColorFilter(colorFilter);
+            return true;
+        });
+
+        binding.fab.setOnClickListener(fab -> {
+            RecipeListFragmentDirections.ActionRecipeListFragmentToEditRecipeFragment action
+                    = RecipeListFragmentDirections.actionRecipeListFragmentToEditRecipeFragment(-1);
+            action.setDynamicTitle(requireContext().getString(R.string.recipe_create));
+            Navigation.findNavController(requireView()).navigate(action);
+        });
+
+    }
+
+    private void initializeRecyclerViewAdapter() {
         recipeRecyclerAdapter =
                 new RecipeRecyclerAdapter(
                         recipeListViewModel.getRecipes().isInitialized() ? recipeListViewModel.getRecipes().getValue() : new ArrayList<>(),
@@ -69,36 +94,34 @@ public class RecipeListFragment extends Fragment {
         binding.recipesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recipesRecyclerView.setAdapter(recipeRecyclerAdapter);
 
+        addDividerToRecyclerView();
+    }
+
+    private void addDividerToRecyclerView() {
         Drawable divider = ResourcesCompat.getDrawable(getResources(), R.drawable.recipe_list_divider, requireActivity().getTheme());
         DividerItemDecoration decoration = new DividerItemDecoration(binding.recipesRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(divider);
         binding.recipesRecyclerView.addItemDecoration(decoration);
+    }
 
-        binding.bottomAppBar.replaceMenu(R.menu.menu_bottom_listrecipes);
-
+    private void generateBottomMenu() {
         Menu menu = binding.bottomAppBar.getMenu();
+        String[] categoryNames = getResources().getStringArray(R.array.categories_names);
+        try (TypedArray categoryIcons = getResources().obtainTypedArray(R.array.categories_icons)) {
+            for (int i = 0; i < categoryNames.length; i++) {
+                MenuItem newItem = menu.add(Menu.NONE, 28304803 + i, Menu.NONE, categoryNames[i]);
+                newItem.setIcon(categoryIcons.getDrawable(i));
+                newItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        MenuItem newItem = menu.add(Menu.NONE, 28304803, Menu.NONE, "Alltag");
-        newItem.setIcon(R.drawable.ic_category_daily);
-        newItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-
-        binding.bottomAppBar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.categoryCake) {
-                Snackbar.make(view, "Kuchen", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                return true;
-                // TODO do the filtering
             }
-            return false;
-        });
+        }
+    }
 
-        binding.fab.setOnClickListener(fab -> {
-            RecipeListFragmentDirections.ActionRecipeListFragmentToEditRecipeFragment action
-                    = RecipeListFragmentDirections.actionRecipeListFragmentToEditRecipeFragment(-1);
-            action.setDynamicTitle(requireContext().getString(R.string.recipe_create));
-            Navigation.findNavController(requireView()).navigate(action);
-        });
+    private void clearBottomAppBarColors() {
+        Menu menu = binding.bottomAppBar.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).getIcon().clearColorFilter();
+        }
 
     }
 

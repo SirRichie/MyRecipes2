@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "de.lialuna.myrecipes2"
-        minSdk 28
+        minSdk 31
         targetSdk 33
         versionCode 1
         versionName "1.0"
