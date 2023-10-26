@@ -91,6 +91,11 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
         setCategoryFilter(new Category(categoryName));
     }
 
+    public void clearCategoryFilter() {
+        categoryPredicate = recipe -> true;
+        obtainDisplayedRecipes();
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private void obtainDisplayedRecipes() {
         if (allRecipes == null)

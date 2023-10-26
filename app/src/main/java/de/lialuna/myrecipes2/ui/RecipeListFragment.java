@@ -38,8 +38,9 @@ public class RecipeListFragment extends Fragment {
     private RecipeListViewModel recipeListViewModel;
 
     private FragmentRecipeListBinding binding;
-
     private RecipeRecyclerAdapter recipeRecyclerAdapter;
+
+    private String lastChosenCategory;
 
     public static RecipeListFragment newInstance() {
         return new RecipeListFragment();
@@ -63,9 +64,16 @@ public class RecipeListFragment extends Fragment {
 
         ColorFilter colorFilter = new BlendModeColorFilter(getResources().getColor(R.color.complementary_700, null), BlendMode.SRC_ATOP);
         binding.bottomAppBar.setOnMenuItemClickListener(item -> {
-            recipeRecyclerAdapter.setCategoryFilter(item.getTitle().toString());
             clearBottomAppBarColors();
-            item.getIcon().setColorFilter(colorFilter);
+            // if the same category is pressed again "unselect" it
+            if (item.getTitle().toString().equals(lastChosenCategory)) {
+                recipeRecyclerAdapter.clearCategoryFilter();
+                lastChosenCategory = "";
+            } else {
+                recipeRecyclerAdapter.setCategoryFilter(item.getTitle().toString());
+                item.getIcon().setColorFilter(colorFilter);
+                lastChosenCategory = item.getTitle().toString();
+            }
             return true;
         });
 
