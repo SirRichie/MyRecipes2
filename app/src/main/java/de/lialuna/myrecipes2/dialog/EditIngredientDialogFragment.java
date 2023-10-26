@@ -5,13 +5,16 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.widget.ArrayAdapter;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import de.lialuna.myrecipes2.R;
 import de.lialuna.myrecipes2.databinding.DialogEditIngredientBinding;
 import de.lialuna.myrecipes2.entity.Ingredient;
+import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
 import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
 public class EditIngredientDialogFragment extends DialogFragment {
@@ -30,6 +33,7 @@ public class EditIngredientDialogFragment extends DialogFragment {
         return fragment;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -39,6 +43,8 @@ public class EditIngredientDialogFragment extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         DialogEditIngredientBinding binding = DialogEditIngredientBinding.inflate(inflater);
+
+        RecipeListViewModel listViewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
         RecipeViewModel viewModel = new ViewModelProvider(requireParentFragment().requireParentFragment()).get(RecipeViewModel.class);
 
         int ingredientIndex = requireArguments().getInt(KEY_INGREDIENT_INDEX);
@@ -46,7 +52,10 @@ public class EditIngredientDialogFragment extends DialogFragment {
         Ingredient ingredient = viewModel.getRecipe().getValue().getIngredients().get(ingredientIndex);
 
         binding.editIngredientAmount.setText(ingredient.getAmount());
-        binding.editIngredientName.setText(ingredient.getIngredient()); // TODO enable autocomplete here
+        binding.editIngredientName.setText(ingredient.getIngredient());
+        // autocomplete
+        ArrayAdapter<String> autocompleteAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, listViewModel.getIngredientNames().getValue());
+        binding.editIngredientName.setAdapter(autocompleteAdapter);
 
         builder.setView(binding.getRoot())
                 .setTitle(binding.getRoot().getContext().getString(R.string.edit_ingredient))
@@ -56,8 +65,8 @@ public class EditIngredientDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         // write back to the ingredient - since these are objects this should directly reflect down to the model
-                        ingredient.setAmount(binding.editIngredientAmount.getText().toString());
-                        ingredient.setIngredient(binding.editIngredientName.getText().toString());
+                        ingredient.setAmount(binding.editIngredientAmount.getText().toString().trim());
+                        ingredient.setIngredient(binding.editIngredientName.getText().toString().trim());
                         viewModel.recipeChanged();
                     }
                 })

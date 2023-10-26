@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import de.lialuna.myrecipes2.adapter.EditIngredientsRecyclerAdapter;
 import de.lialuna.myrecipes2.adapter.ItemTouchHelperCallback;
 import de.lialuna.myrecipes2.databinding.FragmentEditIngredientsBinding;
 import de.lialuna.myrecipes2.dialog.EditIngredientDialogFragment;
+import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
 import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
 /**
@@ -33,13 +35,25 @@ public class EditIngredientsFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        binding = FragmentEditIngredientsBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        // RecipeListViewModel viewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
+        RecipeListViewModel listViewModel = new ViewModelProvider(requireActivity()).get(RecipeListViewModel.class);
         RecipeViewModel viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeViewModel.class);
 
-        // recycler view
+        ArrayAdapter<String> autocompleteAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, listViewModel.getIngredientNames().getValue());
+        binding.inputNewIngredientName.setAdapter(autocompleteAdapter);
 
+        // recycler view
         initIngredientsRecyclerView(viewModel);
         initButtons(viewModel);
     }
@@ -71,8 +85,8 @@ public class EditIngredientsFragment extends Fragment {
     private void initButtons(RecipeViewModel viewModel) {
         binding.buttonAddIngredient.setOnClickListener(v -> {
             viewModel.addIngredient(
-                    binding.inputNewIngredientAmount.getText().toString(),
-                    binding.inputNewIngredientName.getText().toString());
+                    binding.inputNewIngredientAmount.getText().toString().trim(),
+                    binding.inputNewIngredientName.getText().toString().trim());
 
             clearInput();
 
@@ -99,14 +113,7 @@ public class EditIngredientsFragment extends Fragment {
         binding.inputNewIngredientAmount.requestFocus();
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentEditIngredientsBinding.inflate(inflater, container, false);
 
-        return binding.getRoot();
-    }
 
 
 }

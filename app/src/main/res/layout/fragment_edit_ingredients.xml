@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.edit.EditIngredientsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <TextView
         android:id="@+id/labelIngredients"
         android:layout_width="wrap_content"

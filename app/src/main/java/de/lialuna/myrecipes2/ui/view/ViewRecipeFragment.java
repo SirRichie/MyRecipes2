@@ -23,13 +23,10 @@ import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
  */
 public class ViewRecipeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_RECIPE_INDEX = "recipeIndex";
 
     private static final String TAG = "ViewRecipeFragment";
 
-    // TODO: Rename and change types of parameters
     private int recipeIndex;
     private de.lialuna.myrecipes2.databinding.FragmentViewRecipeBinding binding;
 
@@ -44,7 +41,6 @@ public class ViewRecipeFragment extends Fragment {
      * @param recipeIndex the position of the recipe in the recipe list
      * @return A new instance of fragment ViewRecipeFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ViewRecipeFragment newInstance(int recipeIndex) {
         ViewRecipeFragment fragment = new ViewRecipeFragment();
         Bundle args = new Bundle();
