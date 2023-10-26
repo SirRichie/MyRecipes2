@@ -16,29 +16,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.lialuna.myrecipes2.entity.Category;
 import de.lialuna.myrecipes2.entity.Recipe;
 import de.lialuna.myrecipes2.util.Constants;
+import de.lialuna.myrecipes2.util.Util;
 
 public class RecipeListViewModel extends ViewModel {
 
     public static final String TAG = RecipeListViewModel.class.getSimpleName();
 
-    private ListenerRegistration categoriesListenerRegistration;
     private ListenerRegistration recipesListenerRegistration;
 
     private MutableLiveData<List<Recipe>> recipes;
+    private MutableLiveData<List<String>> ingredientNames;
 
     public RecipeListViewModel() {
+        // make sure we always have live data
+        recipes = new MutableLiveData<>();
+        ingredientNames = new MutableLiveData<>();
         subscribeToRecipes();
     }
 
     public LiveData<List<Recipe>> getRecipes() {
-        if (recipes == null) {
-            recipes = new MutableLiveData<>();
-            subscribeToRecipes();
-        }
         return recipes;
+    }
+
+    public LiveData<List<String>> getIngredientNames() {
+        return ingredientNames;
     }
 
     public LiveData<Recipe> getRecipe(int index) {
@@ -55,13 +58,6 @@ public class RecipeListViewModel extends ViewModel {
 
     private void subscribeToRecipes() {
         // ensure recipes is initialized
-        if (recipes == null) {
-            recipes = new MutableLiveData<>();
-        }
-
-        // TODO temp
-        Category categoryToDelete = new Category("Nudeln");
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         recipesListenerRegistration = db
                 .collection(Constants.DB_RECIPE_COLLECTION)
@@ -82,7 +78,12 @@ public class RecipeListViewModel extends ViewModel {
                     // publish the new result
                     Log.d(TAG, "received list of recipies from db with size " + newRecipes.size());
                     recipes.postValue(newRecipes);
+                    setIngredientNames(newRecipes);
                 });
+    }
+
+    private void setIngredientNames(List<Recipe> recipes) {
+        ingredientNames.postValue(Util.getIngredientNamesFromRecipes(recipes));
     }
 
     public void saveOrStoreToDB(Recipe recipe) {
@@ -130,10 +131,7 @@ public class RecipeListViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        categoriesListenerRegistration.remove();    // make sure to stop listening to firestore
-        recipesListenerRegistration.remove();
-        // mLifecycleRegistry.markState(Lifecycle.State.CREATED);
-        // mLifecycleRegistry.markState(Lifecycle.State.DESTROYED);
+        recipesListenerRegistration.remove(); // make sure to stop listening to firestore
         super.onCleared();
     }
 }
