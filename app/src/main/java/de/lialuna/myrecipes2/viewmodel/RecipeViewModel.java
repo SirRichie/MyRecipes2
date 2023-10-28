@@ -11,7 +11,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Collections;
+import java.util.List;
 
+import de.lialuna.myrecipes2.entity.Category;
 import de.lialuna.myrecipes2.entity.Ingredient;
 import de.lialuna.myrecipes2.entity.Recipe;
 import de.lialuna.myrecipes2.entity.Step;
@@ -64,6 +66,11 @@ public class RecipeViewModel extends ViewModel {
 
     public void addStep(String stepText) {
         recipe.getValue().getSteps().add(new Step(stepText));
+        recipeChanged();
+    }
+
+    public void setCategories(List<Category> categories) {
+        recipe.getValue().setCategories(categories);
         recipeChanged();
     }
 

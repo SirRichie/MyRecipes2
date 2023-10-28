@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import de.lialuna.myrecipes2.adapter.EditStepsRecyclerAdapter;
 import de.lialuna.myrecipes2.adapter.ItemTouchHelperCallback;
 import de.lialuna.myrecipes2.databinding.FragmentEditStepsBinding;
-import de.lialuna.myrecipes2.dialog.EditIngredientDialogFragment;
+import de.lialuna.myrecipes2.dialog.EditStepDialogFragment;
 import de.lialuna.myrecipes2.viewmodel.RecipeViewModel;
 
 /**
@@ -46,7 +46,7 @@ public class EditStepsFragment extends Fragment {
     private void initStepsRecyclerView(RecipeViewModel viewModel) {
         adapter = new EditStepsRecyclerAdapter(
                 position -> {   // lambda for click events
-                    EditIngredientDialogFragment dialog = EditIngredientDialogFragment.newInstance(position);
+                    EditStepDialogFragment dialog = EditStepDialogFragment.newInstance(position);
                     dialog.show(getChildFragmentManager(), "editIngredient");
                 },
                 viewModel::removeStep);

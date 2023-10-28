@@ -125,6 +125,7 @@ public class Recipe implements Comparable<Recipe>, Serializable, Parcelable {
 
     /** Parcelable **/
 
+
     @Override
     public int describeContents() {
         return 0;
