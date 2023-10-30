@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -63,7 +66,7 @@ public class RecipeListFragment extends Fragment {
         recipeListViewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
 
         initializeRecyclerViewAdapter();
-
+        addSearch();
         generateBottomMenu();
 
 
@@ -86,6 +89,36 @@ public class RecipeListFragment extends Fragment {
             Navigation.findNavController(requireView()).navigate(action);
         });
 
+    }
+
+    private void addSearch() {
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_search_recipes, menu);
+                MenuItem searchMenuItem = menu.findItem(R.id.search);
+                SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        recipeRecyclerAdapter.setTitleFilter(newText);
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                // not implemented here
+                return false;
+            }
+        });
     }
 
 
