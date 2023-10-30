@@ -49,7 +49,7 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
         binding.listRecipeCategories.setText(buildCategoriesString(recipe));
 
         itemView.setOnClickListener(v -> {
-            Log.d(TAG, "clicked on " + recipe);
+            Log.d(TAG, "clicked on " + recipe + " | position = " + position);
             RecipeListFragmentDirections.ActionRecipeListFragmentToViewRecipeFragment action
                     = RecipeListFragmentDirections.actionRecipeListFragmentToViewRecipeFragment(position);
             action.setDynamicTitle(recipe.getTitle());
@@ -57,8 +57,6 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
         });
 
         itemView.setOnLongClickListener(v -> {
-            Log.d(TAG, "long clicked on " + recipe.hashCode());
-
             startEditActivity(position, v);
             return true;
         });
@@ -74,6 +72,7 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void startEditActivity(int position, View view) {
+        Log.d(TAG, "starting edit activity for position " + position);
         RecipeListFragmentDirections.ActionRecipeListFragmentToEditRecipeFragment action
                 = RecipeListFragmentDirections.actionRecipeListFragmentToEditRecipeFragment(position);
         action.setDynamicTitle(itemView.getContext().getString(R.string.title_edit_recipe));
