@@ -35,7 +35,6 @@ public class EditIngredientsRecyclerAdapter extends RecyclerView.Adapter<EditIng
 
         this.clickListener = clickListener;
         this.deleteIngredientListener = deleteIngredientListener;
-        // Log.d(TAG, "ingredients (" + ingredients.size() + ") = " + ingredients);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -146,7 +145,6 @@ public class EditIngredientsRecyclerAdapter extends RecyclerView.Adapter<EditIng
         }
 
         public void bindTo(Ingredient ingredient) {
-            Log.d(TAG, "binding to " + ingredient);
             binding.listIngredientsAmount.setText(ingredient.getAmount());
             binding.listIngredientsIngredient.setText(ingredient.getIngredient());
 

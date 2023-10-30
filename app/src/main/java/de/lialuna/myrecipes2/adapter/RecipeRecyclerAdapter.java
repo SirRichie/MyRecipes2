@@ -1,7 +1,6 @@
 package de.lialuna.myrecipes2.adapter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -55,7 +54,6 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = displayedRecipes.get(position);
         int globalPosition = allRecipes.indexOf(recipe);
-        Log.d(TAG, "globalPosition = " + globalPosition);
         holder.bindTo(recipe, globalPosition);
     }
 
