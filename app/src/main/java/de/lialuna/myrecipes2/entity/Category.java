@@ -1,17 +1,13 @@
 package de.lialuna.myrecipes2.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
-
-import java.io.Serializable;
 
 /**
  * Created by Tobias on 05.01.2018.
  */
 
-public class Category implements Serializable, Comparable<Category>, Parcelable, Listable {
+// public class Category implements Serializable, Comparable<Category>, Parcelable, Listable {
+public class Category implements Comparable<Category> {
     private String name;
 
     public Category() {
@@ -49,12 +45,9 @@ public class Category implements Serializable, Comparable<Category>, Parcelable,
         return name.compareTo(o.name);
     }
 
-    @Override
-    public String displayName() {
-        return name;
-    }
 
     /** Parcelable **/
+/*
 
     @Override
     public int describeContents() {
@@ -81,5 +74,6 @@ public class Category implements Serializable, Comparable<Category>, Parcelable,
         name = in.readString();
     }
 
+*/
 
 }

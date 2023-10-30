@@ -1,16 +1,12 @@
 package de.lialuna.myrecipes2.entity;
 
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Serializable;
-
 /**
  * Created by Tobias on 05.01.2018.
  */
 
-public class Step implements Serializable, Parcelable {
+// public class Step implements Serializable, Parcelable {
+public class Step {
 
     private String text;
 
@@ -30,7 +26,7 @@ public class Step implements Serializable, Parcelable {
     }
 
     /** Parcelable **/
-
+/*
     @Override
     public int describeContents() {
         return 0;
@@ -55,4 +51,6 @@ public class Step implements Serializable, Parcelable {
     private Step(Parcel in) {
         text = in.readString();
     }
+
+ */
 }

@@ -1,14 +1,11 @@
 package de.lialuna.myrecipes2.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.firestore.Exclude;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +15,8 @@ import java.util.stream.Collectors;
  * Created by Tobias on 05.01.2018.
  */
 
-public class Recipe implements Comparable<Recipe>, Serializable, Parcelable {
+// public class Recipe implements Comparable<Recipe>, Serializable, Parcelable {
+public class Recipe implements Comparable<Recipe> {
 
     private String dbID;
     private String title;
@@ -123,8 +121,38 @@ public class Recipe implements Comparable<Recipe>, Serializable, Parcelable {
         this.imageURL = imageURL;
     }
 
-    /** Parcelable **/
+    public String getDbID() {
+        return dbID;
+    }
 
+    public void setDbID(String dbID) {
+        this.dbID = dbID;
+    }
+
+    @Exclude
+    public byte[] getThumbnail() {
+        return thumbnail;
+    }
+
+    @Exclude
+    public void setThumbnail(byte[] thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    // for firestore
+    public String getThumbnailForFirestore() {
+        return thumbnail == null ? null : Base64.encodeToString(thumbnail, Base64.DEFAULT);
+    }
+
+    // for firestore
+    public void setThumbnailForFirestore(String representation) {
+        if (representation != null) {
+            thumbnail = Base64.decode(representation, Base64.DEFAULT);
+        }
+    }
+
+    /** Parcelable **/
+/*
 
     @Override
     public int describeContents() {
@@ -164,35 +192,7 @@ public class Recipe implements Comparable<Recipe>, Serializable, Parcelable {
         imageURL = in.readString();
     }
 
-    public String getDbID() {
-        return dbID;
-    }
 
-    public void setDbID(String dbID) {
-        this.dbID = dbID;
-    }
-
-    @Exclude
-    public byte[] getThumbnail() {
-        return thumbnail;
-    }
-
-    @Exclude
-    public void setThumbnail(byte[] thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    // for firestore
-    public String getThumbnailForFirestore() {
-        return thumbnail == null ? null : Base64.encodeToString(thumbnail, Base64.DEFAULT);
-    }
-
-    // for firestore
-    public void setThumbnailForFirestore(String representation) {
-        if (representation != null) {
-            thumbnail = Base64.decode(representation, Base64.DEFAULT);
-        }
-    }
-
+*/
 
 }

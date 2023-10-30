@@ -1,17 +1,13 @@
 package de.lialuna.myrecipes2.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Serializable;
-
 /**
  * Created by Tobias on 05.01.2018.
  */
 
-public class Ingredient implements Serializable, Parcelable {
+// public class Ingredient implements Serializable, Parcelable {
+public class Ingredient {
     private String amount;
-//    private String unit;
+    //    private String unit;
     private String ingredient;
     private boolean groupIdentifier = false;
 
@@ -58,6 +54,7 @@ public class Ingredient implements Serializable, Parcelable {
     }
 
     /** Parcelable **/
+/*
 
     @Override
     public int describeContents() {
@@ -89,6 +86,7 @@ public class Ingredient implements Serializable, Parcelable {
         ingredient = in.readString();
         groupIdentifier = in.readInt() != 0;
     }
+*/
 
     public boolean isGroupIdentifier() {
         return groupIdentifier;
