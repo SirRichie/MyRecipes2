@@ -6,7 +6,6 @@ import android.graphics.BlendModeColorFilter;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +43,7 @@ public class RecipeListFragment extends Fragment {
 
     private FragmentRecipeListBinding binding;
     private RecipeRecyclerAdapter recipeRecyclerAdapter;
+    private SearchMenuProvider searchMenuProvider;
 
     private String lastChosenCategory;
 
@@ -54,7 +54,6 @@ public class RecipeListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView | lastChosenCategory = " + lastChosenCategory);
         binding = FragmentRecipeListBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -62,10 +61,10 @@ public class RecipeListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated");
         recipeListViewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
 
         initializeRecyclerViewAdapter();
+        initializeSearch();
         addSearch();
         generateBottomMenu();
 
@@ -91,36 +90,26 @@ public class RecipeListFragment extends Fragment {
 
     }
 
-    private void addSearch() {
-        requireActivity().addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.menu_search_recipes, menu);
-                MenuItem searchMenuItem = menu.findItem(R.id.search);
-                SearchView searchView = (SearchView) searchMenuItem.getActionView();
-
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        recipeRecyclerAdapter.setTitleFilter(newText);
-                        return true;
-                    }
-                });
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                // not implemented here
-                return false;
-            }
-        });
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        removeSearch();
     }
 
+    private void addSearch() {
+        requireActivity().addMenuProvider(searchMenuProvider);
+
+    }
+
+    private void removeSearch() {
+        requireActivity().removeMenuProvider(searchMenuProvider);
+    }
+
+    private void initializeSearch() {
+        if (searchMenuProvider == null) {
+            searchMenuProvider = new SearchMenuProvider();
+        }
+    }
 
     private void initializeRecyclerViewAdapter() {
         recipeRecyclerAdapter =
@@ -178,6 +167,37 @@ public class RecipeListFragment extends Fragment {
         recipeRecyclerAdapter.setCategoryFilter(item.getTitle().toString());
         item.getIcon().setColorFilter(colorFilter);
         lastChosenCategory = item.getTitle().toString();
+    }
+
+    private class SearchMenuProvider implements MenuProvider {
+
+        protected SearchView searchView;
+
+        @Override
+        public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+            menuInflater.inflate(R.menu.menu_search_recipes, menu);
+            MenuItem searchMenuItem = menu.findItem(R.id.search);
+            searchView = (SearchView) searchMenuItem.getActionView();
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    recipeRecyclerAdapter.setTitleFilter(newText);
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+            // not implemented here
+            return false;
+        }
     }
 
 }
