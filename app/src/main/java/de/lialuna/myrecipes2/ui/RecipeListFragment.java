@@ -6,6 +6,7 @@ import android.graphics.BlendModeColorFilter;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
 
 public class RecipeListFragment extends Fragment {
 
+    private static final String TAG = "RecipeListFragment";
     private RecipeListViewModel recipeListViewModel;
 
     private FragmentRecipeListBinding binding;
@@ -49,6 +51,7 @@ public class RecipeListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView | lastChosenCategory = " + lastChosenCategory);
         binding = FragmentRecipeListBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -56,13 +59,14 @@ public class RecipeListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(TAG, "onViewCreated");
         recipeListViewModel = new ViewModelProvider(getActivity()).get(RecipeListViewModel.class);
 
         initializeRecyclerViewAdapter();
 
         generateBottomMenu();
 
-        ColorFilter colorFilter = new BlendModeColorFilter(getResources().getColor(R.color.complementary_700, null), BlendMode.SRC_ATOP);
+
         binding.bottomAppBar.setOnMenuItemClickListener(item -> {
             clearBottomAppBarColors();
             // if the same category is pressed again "unselect" it
@@ -70,9 +74,7 @@ public class RecipeListFragment extends Fragment {
                 recipeRecyclerAdapter.clearCategoryFilter();
                 lastChosenCategory = "";
             } else {
-                recipeRecyclerAdapter.setCategoryFilter(item.getTitle().toString());
-                item.getIcon().setColorFilter(colorFilter);
-                lastChosenCategory = item.getTitle().toString();
+                selectCategoryMenuItem(item);
             }
             return true;
         });
@@ -85,6 +87,7 @@ public class RecipeListFragment extends Fragment {
         });
 
     }
+
 
     private void initializeRecyclerViewAdapter() {
         recipeRecyclerAdapter =
@@ -121,6 +124,10 @@ public class RecipeListFragment extends Fragment {
                 newItem.setIcon(categoryIcons.getDrawable(i));
                 newItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
+                // category might already be set if returning to this view
+                if (categoryNames[i].equals(lastChosenCategory)) {
+                    selectCategoryMenuItem(newItem);
+                }
             }
         }
     }
@@ -131,6 +138,13 @@ public class RecipeListFragment extends Fragment {
             menu.getItem(i).getIcon().clearColorFilter();
         }
 
+    }
+
+    private void selectCategoryMenuItem(MenuItem item) {
+        ColorFilter colorFilter = new BlendModeColorFilter(getResources().getColor(R.color.complementary_700, null), BlendMode.SRC_ATOP);
+        recipeRecyclerAdapter.setCategoryFilter(item.getTitle().toString());
+        item.getIcon().setColorFilter(colorFilter);
+        lastChosenCategory = item.getTitle().toString();
     }
 
 }
