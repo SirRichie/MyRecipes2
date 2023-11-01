@@ -8,25 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.lialuna.myrecipes2.entity.Ingredient;
-import de.lialuna.myrecipes2.entity.Recipe;
 import de.lialuna.myrecipes2.entity.Step;
 
 
-public class EssenTrinkenRecipeParser implements RecipeParser {
+public class EssenTrinkenRecipeParser extends AbstractRecipeParser {
 
     private static final String TAG = "EssenTrinkenRecipeParser";
 
-    @Override
-    public Recipe parseRecipe(Document doc) {
-        return new Recipe(getTitle(doc), getSteps(doc), getIngredients(doc), new ArrayList<>());
-    }
 
-    private String getTitle(Document doc) {
+    public String getTitle(Document doc) {
         Element titleElement = doc.selectFirst("span.title__headline");
         return titleElement.text();
     }
 
-    private List<Ingredient> getIngredients(Document doc) {
+    public List<Ingredient> getIngredients(Document doc) {
         List<Ingredient> result = new ArrayList<>();
         Elements listElements = doc.select(".recipe-ingredients__list");
         for (Element element : listElements.first().children()) {
@@ -79,7 +74,7 @@ public class EssenTrinkenRecipeParser implements RecipeParser {
         return new Ingredient(amount, ingredientName);
     }*/
 
-    private List<Step> getSteps(Document doc) {
+    public List<Step> getSteps(Document doc) {
         List<Step> result = new ArrayList<>();
         Elements stepElements = doc.select("ol.group__items li");
         for (Element stepElement : stepElements) {

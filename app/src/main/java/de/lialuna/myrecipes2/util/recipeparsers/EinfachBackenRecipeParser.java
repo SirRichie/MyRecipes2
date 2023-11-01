@@ -12,7 +12,7 @@ import java.util.List;
 import de.lialuna.myrecipes2.entity.Ingredient;
 import de.lialuna.myrecipes2.entity.Step;
 
-public class EinfachBackenParser extends AbstractRecipeParser {
+public class EinfachBackenRecipeParser extends AbstractRecipeParser {
 
     private static final String TAG = "EinfachBackenParser";
 
@@ -37,9 +37,11 @@ public class EinfachBackenParser extends AbstractRecipeParser {
         // ingredients are organized structually into groups, so first grab the group name then iterate through the children
 
         String groupName = ingredientElement.text().trim();
-        Ingredient ingredient = new Ingredient("", groupName);
-        ingredient.setGroupIdentifier(true);
-        result.add(ingredient);
+        if (groupName != null && !groupName.isEmpty()) {
+            Ingredient ingredient = new Ingredient("", groupName);
+            ingredient.setGroupIdentifier(true);
+            result.add(ingredient);
+        }
 
         Elements ingredientsElements = ingredientElement.select(".ingredients-wrapper");
         for (Element element : ingredientsElements) {

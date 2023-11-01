@@ -1,7 +1,5 @@
 package de.lialuna.myrecipes2.util.recipeparsers;
 
-import android.util.Log;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -15,7 +13,7 @@ import de.lialuna.myrecipes2.entity.Ingredient;
 import de.lialuna.myrecipes2.entity.Recipe;
 import de.lialuna.myrecipes2.entity.Step;
 
-public class ChefkochRecipeParser implements RecipeParser {
+public class ChefkochRecipeParser extends AbstractRecipeParser {
 
     private static final String TAG = "ChefkochRecipeParser";
 
@@ -24,12 +22,12 @@ public class ChefkochRecipeParser implements RecipeParser {
         return new Recipe(getTitle(doc), getSteps(doc), getIngredients(doc), new ArrayList<>());
     }
 
-    private String getTitle(Document doc) {
+    public String getTitle(Document doc) {
         Element titleElement = doc.selectFirst("article h1");
         return titleElement.text();
     }
 
-    private List<Ingredient> getIngredients(Document doc) {
+    public List<Ingredient> getIngredients(Document doc) {
         List<Ingredient> result = new ArrayList<>();
         Elements ingredientElements = doc.select(".ingredients   tr");
         for (Element element : ingredientElements) {
@@ -60,11 +58,10 @@ public class ChefkochRecipeParser implements RecipeParser {
         return ingredient;
     }
 
-    private List<Step> getSteps(Document doc) {
+    public List<Step> getSteps(Document doc) {
         List<Step> result = new ArrayList<>();
 
-        Element stepsElement = doc.select("article.ds-box > div.ds-box").get(2);
-        Log.d(TAG, stepsElement.toString());
+        Element stepsElement = doc.select("article.ds-box > div.ds-box").get(1);
 
         // memorize if we encountered a linebreak to know when to end a Step
         boolean previousNodeWasLinebreak = false;
@@ -90,6 +87,7 @@ public class ChefkochRecipeParser implements RecipeParser {
             if (current instanceof TextNode) {
                 TextNode textNode = (TextNode) current;
                 builder.append(textNode.text());
+                previousNodeWasLinebreak = false; // if we encountered text, the previous node was not a linebreak
             }
         }
 

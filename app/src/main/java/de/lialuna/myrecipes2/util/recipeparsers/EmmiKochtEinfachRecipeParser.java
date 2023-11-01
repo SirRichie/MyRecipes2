@@ -10,20 +10,39 @@ import java.util.List;
 import de.lialuna.myrecipes2.entity.Ingredient;
 import de.lialuna.myrecipes2.entity.Step;
 
-public class EmmiKochtEinfachParser extends AbstractRecipeParser {
+public class EmmiKochtEinfachRecipeParser extends AbstractRecipeParser {
 
     private static final String TAG = "EmmiKochtEinfachParser";
 
     @Override
     protected String getTitle(Document doc) {
-        Element titleElement = doc.selectFirst("h1.post-title");
+        Element titleElement = doc.selectFirst("h1.title");
         return titleElement.text();
     }
 
     @Override
     protected List<Ingredient> getIngredients(Document doc) {
         List<Ingredient> result = new ArrayList<>();
-        Elements ingredientElements = doc.select("ul.wprm-recipe-ingredients li");
+        Elements ingredientGroups = doc.select("div.wprm-recipe-ingredient-group");
+        ingredientGroups.remove(0);
+        for (Element group : ingredientGroups) {
+            result.addAll(processIngredientGroup(group));
+        }
+        return result;
+    }
+
+    private List<Ingredient> processIngredientGroup(Element groupElement) {
+        List<Ingredient> result = new ArrayList<>();
+        Element groupName = groupElement.selectFirst("h4");
+        if (groupName != null) {
+            String text = groupName.text().trim();
+            if (!text.isEmpty()) {
+                Ingredient groupIngredient = new Ingredient("", text);
+                groupIngredient.setGroupIdentifier(true);
+                result.add(groupIngredient);
+            }
+        }
+        Elements ingredientElements = groupElement.select("li");
         for (Element element : ingredientElements) {
             result.add(getIngredient(element));
         }

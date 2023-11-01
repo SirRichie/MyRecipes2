@@ -21,7 +21,7 @@ public interface RecipeParser {
         put("www.kochbar.de", new KochbarRecipeParser());
         put("www.brigitte.de", new BrigitteRecipeParser());
         put("www.lecker.de", new LeckerRecipeParser());
-        put("emmikochteinfach.de", new EmmiKochtEinfachParser());
-        put("www.einfachbacken.de", new EinfachBackenParser());
+        put("emmikochteinfach.de", new EmmiKochtEinfachRecipeParser());
+        put("www.einfachbacken.de", new EinfachBackenRecipeParser());
     }});
 }

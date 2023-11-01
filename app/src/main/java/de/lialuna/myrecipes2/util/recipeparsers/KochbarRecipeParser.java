@@ -17,15 +17,43 @@ public class KochbarRecipeParser extends AbstractRecipeParser {
     @Override
     protected List<Ingredient> getIngredients(Document doc) {
         List<Ingredient> result = new ArrayList<>();
-        Elements ingredientElements = doc.select("table.kb-recipe-ingredient-table tr");
+        Elements ingredientElements = doc.select("div.recipe-content table");
 
         for (Element element : ingredientElements) {
-            if (element.children().size() < 2)
+
+        /*    if (element.children().size() < 2)
                 continue; // ignore headings etc.
             result.add(getIngredient(element));
+
+         */
+            result.addAll(processTable(element));
+        }
+
+
+        return result;
+    }
+
+    private List<Ingredient> processTable(Element tableElement) {
+        List<Ingredient> result = new ArrayList<>();
+        Element header = tableElement.selectFirst("thead");
+        if (header != null && !header.text().trim().isEmpty()) {
+            Ingredient ingredient = new Ingredient("", header.text().trim());
+            ingredient.setGroupIdentifier(true);
+            result.add(ingredient);
+        }
+
+        Elements tableRows = tableElement.select("tbody tr");
+        for (Element row : tableRows) {
+            result.add(processTableRow(row));
         }
 
         return result;
+    }
+
+    private Ingredient processTableRow(Element row) {
+        String amount = row.child(1).text().trim();
+        String ingredientName = row.child(0).text().trim();
+        return new Ingredient(amount, ingredientName);
     }
 
     private Ingredient getIngredient(Element element) {
@@ -36,7 +64,7 @@ public class KochbarRecipeParser extends AbstractRecipeParser {
     @Override
     protected List<Step> getSteps(Document doc) {
         List<Step> result = new ArrayList<>();
-        Elements stepElements = doc.select("div.kb-recipe-steps-right-var");
+        Elements stepElements = doc.select("section.jt-preparation p span");
         for (Element stepElement : stepElements) {
             result.add(new Step(stepElement.text().trim()));
         }
@@ -46,6 +74,6 @@ public class KochbarRecipeParser extends AbstractRecipeParser {
 
     @Override
     protected String getTitle(Document doc) {
-        return doc.selectFirst("div.kb-recipe-headline h1").text().trim();
+        return doc.selectFirst("h2.recipe-head-headline").text().trim();
     }
 }

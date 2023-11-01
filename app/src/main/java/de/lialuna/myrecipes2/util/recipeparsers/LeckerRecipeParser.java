@@ -15,7 +15,7 @@ public class LeckerRecipeParser extends AbstractRecipeParser {
     @Override
     protected List<Ingredient> getIngredients(Document doc) {
         List<Ingredient> result = new ArrayList<>();
-        Elements ingredientElements = doc.select("ul.list--ingredients li");
+        Elements ingredientElements = doc.select("div.bx-recipe__ingredients p");
 
         for (Element element : ingredientElements) {
             if (element.children().size() < 2)
@@ -33,7 +33,7 @@ public class LeckerRecipeParser extends AbstractRecipeParser {
     @Override
     protected List<Step> getSteps(Document doc) {
         List<Step> result = new ArrayList<>();
-        Elements stepElements = doc.select("dl.list--preparation dd");
+        Elements stepElements = doc.select("section.bx-recipe__instructions p");
         for (Element stepElement : stepElements) {
             result.add(new Step(stepElement.text().trim()));
         }
@@ -42,6 +42,6 @@ public class LeckerRecipeParser extends AbstractRecipeParser {
 
     @Override
     protected String getTitle(Document doc) {
-        return doc.selectFirst(".article-header h1").text().trim();
+        return doc.selectFirst("h1.bx-content__headline").text().trim();
     }
 }
