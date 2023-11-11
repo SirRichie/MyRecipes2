@@ -73,7 +73,6 @@ public class ViewRecipeFragment extends Fragment {
         // we don't use the viewmodel here, but we need to create it so children have access to it
         new ViewModelProvider(this, factory).get(RecipeViewModel.class);
 
-
         return binding.getRoot();
     }
 
@@ -82,6 +81,10 @@ public class ViewRecipeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ViewRecipeStateAdapter adapter = new ViewRecipeStateAdapter(this);
         binding.pager.setAdapter(adapter);
+
+        // keep the screen on when viewing recipes
+        view.setKeepScreenOn(true);
+
     }
 
     public static class ViewRecipeStateAdapter extends FragmentStateAdapter {

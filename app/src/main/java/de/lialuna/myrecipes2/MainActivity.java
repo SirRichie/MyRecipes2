@@ -1,13 +1,16 @@
 package de.lialuna.myrecipes2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -15,11 +18,20 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import de.lialuna.myrecipes2.databinding.ActivityMainBinding;
+import de.lialuna.myrecipes2.entity.Recipe;
+import de.lialuna.myrecipes2.ui.edit.EditRecipeFragmentArgs;
+import de.lialuna.myrecipes2.util.recipeparsers.ParseRecipeHelper;
+import de.lialuna.myrecipes2.util.recipeparsers.Result;
+import de.lialuna.myrecipes2.viewmodel.RecipeListViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,7 +87,41 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-     }
+        try {
+            dispatchIntent(getIntent());
+        } catch (MalformedURLException e) {
+            showErrorSnackbar(binding.getRoot(), e);
+        }
+    }
+
+    private void dispatchIntent(Intent intent) throws MalformedURLException {
+        if (intent.getAction().equals(Intent.ACTION_SEND)) {
+            importRecipe(new URL(intent.getStringExtra(Intent.EXTRA_TEXT)));
+        }
+    }
+
+    private void importRecipe(URL url) {
+        ParseRecipeHelper.downloadAndParseAsync(url, recipeResult -> {
+            if (recipeResult instanceof Result.Success) {
+                // Happy path
+                RecipeListViewModel recipeListViewModel = new ViewModelProvider(this).get(RecipeListViewModel.class);
+                int newRecipeIndex = recipeListViewModel.addRecipe(((Result.Success<Recipe>) recipeResult).data);
+                // TODO use index to start edit fragment
+                EditRecipeFragmentArgs args = new EditRecipeFragmentArgs.Builder(newRecipeIndex).build();
+                Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+                        .navigate(R.id.EditRecipeFragment, args.toBundle());
+            } else {
+                Result.Error<Recipe> error = (Result.Error<Recipe>) recipeResult;
+                showErrorSnackbar(binding.getRoot(), error.exception);
+            }
+
+        });
+    }
+
+    private void showErrorSnackbar(View view, Exception e) {
+        Snackbar.make(view, "Import Error " + e.getMessage(), Snackbar.LENGTH_SHORT)
+                .show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -105,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
 
 
 }

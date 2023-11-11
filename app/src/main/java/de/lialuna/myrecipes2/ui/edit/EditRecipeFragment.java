@@ -66,17 +66,17 @@ public class EditRecipeFragment extends Fragment {
         Log.d(TAG, "recipe index is " + recipeIndex);
 
         if (savedInstanceState == null) {
-            Bundle bundle = new Bundle();
-            bundle.putInt(ARG_RECIPE_INDEX, recipeIndex);
+            // Bundle bundle = new Bundle();
+            // bundle.putInt(ARG_RECIPE_INDEX, recipeIndex);
 
             getChildFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.editIngredientsFragmentContainer, EditIngredientsFragment.class, bundle)
+                    .add(R.id.editIngredientsFragmentContainer, EditIngredientsFragment.class, null)
                     .commit();
 
             getChildFragmentManager().beginTransaction()
                     .setReorderingAllowed(true)
-                    .add(R.id.editStepsFragmentContainer, EditStepsFragment.class, bundle)
+                    .add(R.id.editStepsFragmentContainer, EditStepsFragment.class, null)
                     .commit();
 
 

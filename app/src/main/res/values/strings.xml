@@ -7,6 +7,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="action_categories">Kategorien</string>
     <string name="action_import">Importieren</string>
+    <string name="action_keep_screen_on">Bildschirm anlassen</string>
 
     <string name="dialog_enter_URL">Bitte Adresse des Rezepts eingeben</string>
     <string name="dialog_title_edit_ingredient">Zutat bearbeiten</string>

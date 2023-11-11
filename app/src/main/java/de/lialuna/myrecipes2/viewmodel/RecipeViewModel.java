@@ -6,18 +6,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.Collections;
 import java.util.List;
 
+import de.lialuna.myrecipes2.data.RecipeRepository;
 import de.lialuna.myrecipes2.entity.Category;
 import de.lialuna.myrecipes2.entity.Ingredient;
 import de.lialuna.myrecipes2.entity.Recipe;
 import de.lialuna.myrecipes2.entity.Step;
-import de.lialuna.myrecipes2.util.Constants;
 
 public class RecipeViewModel extends ViewModel {
     public static final String TAG = RecipeListViewModel.class.getSimpleName();
@@ -74,20 +70,13 @@ public class RecipeViewModel extends ViewModel {
         recipeChanged();
     }
 
-    public boolean isNewRecipe() {
-        return recipe.getValue().getDbID() == null;
-    }
-
     public void saveOrStoreToDB() {
-        CollectionReference recipes = FirebaseFirestore.getInstance().collection(Constants.DB_RECIPE_COLLECTION);
-        DocumentReference recipeRef = null;
+        Recipe entity = recipe.getValue();
 
-        if (isNewRecipe()) {
-            // create it in the database
-            recipeRef = recipes.document();
-            recipe.getValue().setDbID(recipeRef.getId());
+        if (RecipeRepository.isNewRecipe(entity)) {
+            RecipeRepository.addRecipe(entity);
         } else {
-            recipeRef = recipes.document(recipe.getValue().getDbID());
+            RecipeRepository.updateRecipe(entity);
         }
 
         /*if (imageChanged) { // only do image handling if the image changed
@@ -106,15 +95,11 @@ public class RecipeViewModel extends ViewModel {
         }*/ // TODO maybe add image handling later again
 
         // store recipe
-        recipeRef.set(recipe.getValue());
 
     }
 
     public void removeRecipeFromDB() {
-        if (isNewRecipe())
-            throw new IllegalStateException("Cannot delete non-existing recipe");
-        FirebaseFirestore.getInstance().collection(Constants.DB_RECIPE_COLLECTION)
-                .document(recipe.getValue().getDbID()).delete();
+        RecipeRepository.removeRecipe(recipe.getValue());
     }
 
     public static class Factory implements ViewModelProvider.Factory {

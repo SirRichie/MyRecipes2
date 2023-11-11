@@ -6,8 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -16,24 +14,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.lialuna.myrecipes2.data.RecipeRepository;
 import de.lialuna.myrecipes2.entity.Recipe;
 import de.lialuna.myrecipes2.util.Constants;
 import de.lialuna.myrecipes2.util.Util;
 
-public class RecipeListViewModel extends ViewModel {
+public class RecipeListViewModel extends ViewModel implements RecipeRepository.RecipeRepositoryDataObserver {
 
     public static final String TAG = RecipeListViewModel.class.getSimpleName();
 
     private ListenerRegistration recipesListenerRegistration;
 
-    private MutableLiveData<List<Recipe>> recipes;
-    private MutableLiveData<List<String>> ingredientNames;
+    private final MutableLiveData<List<Recipe>> recipes;
+    private final MutableLiveData<List<String>> ingredientNames;
 
     public RecipeListViewModel() {
         // make sure we always have live data
         recipes = new MutableLiveData<>();
         ingredientNames = new MutableLiveData<>();
-        subscribeToRecipes();
+        RecipeRepository.loadRecipes(this);
     }
 
     public LiveData<List<Recipe>> getRecipes() {
@@ -54,6 +53,15 @@ public class RecipeListViewModel extends ViewModel {
         } else {
             return new MutableLiveData<>(recipes.getValue().get(index));
         }
+    }
+
+    public int addRecipe(Recipe recipe) {
+        // first add the recipe to the DB, if anything goes wrong we'll get an exception
+        RecipeRepository.addRecipe(recipe);
+
+        recipes.getValue().add(recipe);
+        Collections.sort(recipes.getValue());
+        return recipes.getValue().indexOf(recipe);
     }
 
     private void subscribeToRecipes() {
@@ -86,52 +94,15 @@ public class RecipeListViewModel extends ViewModel {
         ingredientNames.postValue(Util.getIngredientNamesFromRecipes(recipes));
     }
 
-    public void saveOrStoreToDB(Recipe recipe) {
-        CollectionReference recipes = FirebaseFirestore.getInstance().collection(Constants.DB_RECIPE_COLLECTION);
-        DocumentReference recipeRef = null;
-
-        if (isNewRecipe(recipe)) {
-            // create it in the database
-            recipeRef = recipes.document();
-            recipe.setDbID(recipeRef.getId());
-        } else {
-            recipeRef = recipes.document(recipe.getDbID());
-        }
-
-        /*if (imageChanged) { // only do image handling if the image changed
-            // find image
-            String url = "images/" + recipe.getValue().getDbID() + ".jpg";
-            StorageReference imageRef = FirebaseStorage.getInstance().getReference().child(url);
-            if (imageUri != null) {
-                // upload image
-                imageRef.putFile(imageUri);
-                // set URL
-                recipe.getValue().setImageURL(url);
-            } else {
-                imageRef.delete(); // may fail, but silently
-                recipe.getValue().setImageURL(null);
-            }
-        }*/ // TODO maybe add image handling later again
-
-        // store recipe
-        recipeRef.set(recipe);
-
-    }
-
-    public void removeRecipeFromDB(Recipe recipe) {
-        if (isNewRecipe(recipe))
-            throw new IllegalStateException("Cannot delete non-existing recipe");
-        FirebaseFirestore.getInstance().collection(Constants.DB_RECIPE_COLLECTION)
-                .document(recipe.getDbID()).delete();
-    }
-
-    public boolean isNewRecipe(Recipe recipe) {
-        return recipe.getDbID() == null;
+    @Override
+    protected void onCleared() {
+        // recipesListenerRegistration.remove(); // make sure to stop listening to firestore
+        super.onCleared();
     }
 
     @Override
-    protected void onCleared() {
-        recipesListenerRegistration.remove(); // make sure to stop listening to firestore
-        super.onCleared();
+    public void recipesLoaded(List<Recipe> recipes) {
+        this.recipes.postValue(recipes);
+        setIngredientNames(recipes);
     }
 }

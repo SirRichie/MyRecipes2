@@ -22,4 +22,5 @@ public class Util {
 
         return ingredientNames.stream().sorted().collect(Collectors.toList());
     }
+
 }
